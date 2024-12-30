@@ -91,7 +91,7 @@ Here's a step-by-step guide to set up the Firebase Flutter project:
    ##### Check lib/firebase_options.dart exists
    ##### Check firebase.json exists
 
-6. **Set Firestore Rules:**
+6. **Set Firestore Rules:**(not necessary)
    ```plaintext
    rules_version = '2';
    service cloud.firestore {
