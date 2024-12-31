@@ -1,8 +1,24 @@
-# Data Model Architecture
+# Data Model Architecture Object Relational Mapping
 
 ## Core Entities
 
-### 1. Student
+### 1. User
+```java
+@Entity
+@Table(name = "users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    private String name;
+    private String email;
+    private String password;
+    private String role;  // e.g., "student", "admin"
+}
+```
+
+### 2. Student
 ```java
 @Entity
 @Table(name = "students")
@@ -12,14 +28,11 @@ public class Student {
     private UUID id;
 
     // Basic Info
-    private String name;
-    private String email;
     private String contact;
     private String school;
     private String district;
-    private String password;
 
-    // O/L Results
+    // O/L Information
     @ElementCollection
     private Map<String, String> olResults;  // subject -> grade
 
@@ -28,6 +41,12 @@ public class Student {
     private Map<String, String> alResults;  // subject -> grade
     private String stream;
     private Double zScore;
+
+    // University Information
+    private String university;
+    private String course;
+    private String degree;
+    private Double gpa;
 
     // Preferences & Skills
     @ElementCollection
@@ -50,7 +69,7 @@ public class CareerPrediction {
 }
 ```
 
-### 2. Stream
+### 3. Stream
 ```java
 @Entity
 @Table(name = "streams")
@@ -75,7 +94,7 @@ public class Stream {
 }
 ```
 
-### 3. Course
+### 4. Course
 ```java
 @Entity
 @Table(name = "courses")
@@ -103,7 +122,7 @@ public class Course {
 }
 ```
 
-### 4. Career
+### 5. Career
 ```java
 @Entity
 @Table(name = "careers")
@@ -126,7 +145,7 @@ public class Career {
 }
 ```
 
-### 5. Institution
+### 6. Institution
 ```java
 @Entity
 @Table(name = "institutions")
@@ -147,88 +166,3 @@ public class Institution {
     private Map<String, String> contactInfo;  // type -> value
 }
 ```
-
-## Design Benefits
-
-1. **Efficient Storage**
-   - UUID-based primary keys
-   - Map-based storage for grades
-   - List-based storage for collections
-   - Embedded objects for predictions
-
-2. **Flexible Relationships**
-   - Many-to-many course-institution
-   - One-to-many stream-course
-   - Embedded career predictions
-   - External resource links
-
-3. **Rich Features**
-   - Multiple grade records
-   - Career path predictions
-   - External resources
-   - Contact information
-
-4. **Easy Integration**
-   - Object Relational Mapping
-   - Postgresql compatible
-   - Flutter serializable
-   - REST API friendly
-
-## Key Features
-
-1. **Integrated Predictions**
-   - Stream predictions based on O/L results
-   - Course predictions based on stream and A/L results
-   - Career suggestions with external information links
-   - Institution recommendations with website links
-
-2. **Educational Pathways**
-   - Clear progression from stream → course → career
-   - Multiple pathway possibilities
-   - Institution options for each path
-
-3. **External Information Integration**
-   - Links to official institution websites
-   - Links to career information resources
-   - Access to up-to-date career details
-   - Direct access to admission information
-
-4. **Student Profile**
-   - Academic performance tracking
-   - Skills and interests
-   - Personality traits
-   - Career preferences
-
-5. **Simple Yet Powerful**
-   - Lightweight entities
-   - Clear relationships
-   - Easy to maintain
-   - Scalable structure
-
-## Database Design
-
-1. **PostgreSQL Optimization**
-   - B-tree indexes for UUID lookups
-   - JSONB for flexible storage
-   - Materialized views for predictions
-   - Trigger-based model updates
-   - Connection pooling
-
-2. **Real-time Updates**
-   - Database triggers for model notifications
-   - WebSocket notifications for clients
-   - Optimistic locking
-   - Transaction management
-
-3. **Performance**
-   - Prepared statements
-   - Query planning
-   - Index optimization
-   - Connection pooling
-   - Statement caching
-
-## User Flow
-1. Student enters O/L results → Server stores data and triggers model
-2. Model updates predictions → Database updated
-3. WebSocket notifies client → UI updates automatically
-4. User browses recommendations with real-time updates

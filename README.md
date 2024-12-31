@@ -1,163 +1,146 @@
 # Next Step 🎓
 
-An AI-powered educational pathway recommendation system that helps students make informed decisions about their academic and career paths.
+An AI-powered educational and career pathway recommendation system that helps students make informed decisions about their academic and career paths. utilizes react frontend and spring boot backend with microservices architecture
 
 ## 🌟 Features
 
-- **Stream Recommendation**:
-Get personalized recommendations for academic streams based on your interests and performance
+- **Career Path Recommendation**:
+Get personalized recommendations for career paths based on your interests and academic performance and goals with probability for success and failure of each path
 
-- **University Field Prediction**:
+- **Explore University Fields**:
 Discover potential university fields that align with your goals
 
-- **Interactive Mobile App**:
-User-friendly Flutter interface for easy access to recommendations
+- **Responsive Web App**:
+User-friendly React frontend for easy access to your profile and recommendations and Robust spring boot backend for efficient data management utilizing microservices architecture
 
 - **AI-Powered Insights**:
-Advanced machine learning models for accurate predictions
+Advanced machine learning models for accurate predictions which update in real-time
+
+- **User Authentication**:
+Secure user authentication and authorization for personalized access to your profile and recommendations
 
 ## 🏗️ Project Structure
 
-
+```
+.
+├── README.md
+├── docs
+│   ├── architecture.md
+│   └── roadmap.md
+├── public
+│   ├── assets
+│   └── index.html
+├── src
+│   ├── App.js
+│   ├── components
+│   │   ├── Career.js
+│   │   ├── Course.js
+│   │   ├── Institution.js
+│   │   ├── Stream.js
+│   │   ├── Student.js
+│   │   └── User.js
+│   ├── index.js
+│   └── service
+│       ├── CareerService.js
+│       ├── CourseService.js
+│       ├── InstitutionService.js
+│       ├── StreamService.js
+│       ├── StudentService.js
+│       └── UserService.js
+├── .gitignore
+├── package.json
+└── package-lock.json
+```
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Python 3.12+ (for AI model)
-- Flutter SDK (for mobile app)
+- Node.js 18+ (for frontend)
+- Java 17+ (for backend)
+- Firebase (for google authentication)
+- PostgreSQL
+- Docker
 - Git
 
 ### Setup
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/adithyasean/Next-Step.git
+   git clone https://github.com/adithyasean/Next-Step-Frontend.git
    ```
 
-2. Set up the Flutter App:
+2. Install dependencies:
    ```bash
-   flutter pub get
+   cd Next-Step-Frontend
+   npm install
    ```
 
-### Firebase Setup
+#### Firebase Setup
 
-Here's a step-by-step guide to set up the Firebase Flutter project:
+Here's a step-by-step guide to set up the Firebase for your project:
 
-#### Prerequisites
-1. Install Flutter SDK
-2. Install Firebase CLI:
-   ```bash
-   curl -sL https://firebase.tools | bash
-   ```
-3. Add firebase to path if not: (for windows)
-   ```cmd
-   setx PATH "%PATH%;%APPDATA%\npm"
-   ```
-4. Add flutterfire to path if not: (for windows)
-   ```cmd
-   setx /M PATH "%PATH%;%USERPROFILE%\AppData\Local\Pub\Cache\bin"
-   ```
-
-#### One-time Setup Steps
-
-1. **Login to Firebase:**
+1. ##### Login to Firebase:**
    ```bash
    firebase login
    ```
 
-2. **Install FlutterFire CLI:**
-   ```bash
-   dart pub global activate flutterfire_cli
-
-3. **Initialize Firebase:**
+2. ##### Initialize Firebase:**
    ```bash
    firebase init
    ```
-   ##### choose "Firestore" option
-   ##### new project ex:next-step-0004
-   ##### accept default locations for rules/indexes 
 
-4. **Configure Firebase:**
-   ```bash
-   flutterfire configure
-   ```
-   ##### choose your project
-   ##### select all platforms
-   ##### use default options
+5. ##### Verify Firebase Files:**
+    Check firebase.json exists
 
-5. **Verify Firebase Files:**
-   ##### Check android/app/google-services.json exists
-   ##### Check ios/Runner/GoogleService-Info.plist exists
-   ##### Check lib/firebase_options.dart exists
-   ##### Check firebase.json exists
-
-6. **Set Firestore Rules:**(not necessary)
-   ```plaintext
-   rules_version = '2';
-   service cloud.firestore {
-     match /databases/{database}/documents {
-       match /{document=**} {
-         allow read, write: if true;  // Test mode only
-       }
-     }
-   }
-   ```
-
-7. **Deploy Rules:**
-   ```bash
-   firebase deploy --only firestore:rules
-   ```
-
-8. **Verify Setup:**
-```dart
-// Check in main.dart that Firebase is initialized:
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(const MyApp());
-}
-```
-
-#### After Each Pull
+### After Each Pull
 
 1. **Update Dependencies:**
    ```bash
-   flutter pub get
+
    ```
 
 2. **Run Build Runner:**
    ```bash
-   flutter pub run build_runner build --delete-conflicting-outputs
+   
    ```
 
 3. **Clean and Run:**
    ```bash
-   flutter clean
-   flutter run
+   
    ```
 
-#### Troubleshooting
+## Troubleshooting
 
 - If build fails:
   ```bash
-  flutter clean
-  flutter pub get
-  flutter run
+  
   ```
 
-#### Important Notes
+## Important Notes
 - Don't commit Firebase configuration files
-- Keep `firebase_options.dart` in version control
 - Update `.gitignore` to exclude sensitive files
 
-### Running Components Separately
+## Running Components Separately
 
-#### Flutter App
+### React Frontend
+
 ```bash
-flutter run  # Run the Flutter app
+cd Next-Step-Frontend
+npm start
 ```
+
+### Spring Boot Backend
+
+```bash
+cd Next-Step-Backend
+./mvnw spring-boot:run
+```
+
+## 📚 Docs
+
+- [Architecture](docs/architecture.md)
+- [Roadmap](docs/roadmap.md) 
 
 ## 🤝 Contributing
 
@@ -169,4 +152,4 @@ flutter run  # Run the Flutter app
 
 ## 📝 License
 
-[Your License]
+[LICENSE](LICENSE)
