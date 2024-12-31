@@ -1,168 +1,205 @@
-# Data Model Architecture Object Relational Mapping
+# Next Step - Complete System Architecture
 
-## Core Entities
+## System Overview
 
-### 1. User
-```java
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+Next Step is built using a microservices architecture, with each service handling specific domain responsibilities while maintaining its own data store. The system is designed to be scalable, maintainable, and flexible.
 
-    private String name;
-    private String email;
-    private String password;
-    private String role;  // e.g., "student", "admin"
-}
-```
+## Microservices Architecture
 
-### 2. Student
-```java
-@Entity
-@Table(name = "students")
-public class Student {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+### 1. User Management Service
+- **Responsibility**: Handles user authentication, authorization, and user data management
+- **Key Entities**:
+  ```java
+  @Entity
+  public class User {
+      private UUID id;
+      private String name;
+      private String email;
+      private String password;
+      private String role;
+  }
+  ```
+- **Database**: Dedicated user database
+- **Key APIs**:
+  - User registration
+  - Authentication
+  - User profile management
 
-    // Basic Info
-    private String contact;
-    private String school;
-    private String district;
+### 2. Student Profile Service
+- **Responsibility**: Manages comprehensive student data and academic profiles
+- **Key Entities**:
+  ```java
+  @Entity
+  public class Student {
+      private UUID id;
+      private String contact;
+      private String school;
+      private String district;
+      private Map<String, String> olResults;
+      private Map<String, String> alResults;
+      private String stream;
+      private Double zScore;
+      private String university;
+      private String course;
+      private Double gpa;
+      private List<String> interests;
+      private List<String> skills;
+      private List<String> strengths;
+      private List<CareerPrediction> predictions;
+  }
+  ```
+- **Database**: Student profile database
+- **Dependencies**: User Management Service
+- **Key APIs**:
+  - Student profile CRUD operations
+  - Academic results management
+  - Skills and interests updates
 
-    // O/L Information
-    @ElementCollection
-    private Map<String, String> olResults;  // subject -> grade
+### 3. Education Data Service
+- **Responsibility**: Manages educational institution and course data
+- **Key Entities**:
+  ```java
+  @Entity
+  public class Stream {
+      private UUID id;
+      private String name;
+      private List<String> requiredOLSubjects;
+      private Map<String, String> minimumOLGrades;
+      private List<Course> possibleCourses;
+      private List<String> relatedCareers;
+  }
 
-    // A/L Information (if exists)
-    @ElementCollection
-    private Map<String, String> alResults;  // subject -> grade
-    private String stream;
-    private Double zScore;
+  @Entity
+  public class Course {
+      private UUID id;
+      private String name;
+      private String duration;
+      private Map<String, String> minimumALGrades;
+      private Double minimumZScore;
+      private List<Institution> offeredBy;
+      private List<String> relatedCareers;
+  }
 
-    // University Information
-    private String university;
-    private String course;
-    private String degree;
-    private Double gpa;
+  @Entity
+  public class Institution {
+      private UUID id;
+      private String name;
+      private String type;
+      private String website;
+      private List<Course> courses;
+  }
 
-    // Preferences & Skills
-    @ElementCollection
-    private List<String> interests;
-    @ElementCollection
-    private List<String> skills;
-    @ElementCollection
-    private List<String> strengths;  // personality traits, soft skills
+  @Entity
+  public class Career {
+      private String code;
+      private String title;
+      private String category;
+      private List<String> requiredSkills;
+      private List<String> relatedCourses;
+  }
+  ```
+- **Database**: Educational data database
+- **Key APIs**:
+  - Stream and course information
+  - Institution details
+  - Career path data
 
-    // Career Predictions
-    @ElementCollection
-    private List<CareerPrediction> predictions;
-}
+### 4. Recommendation Engine Service
+- **Responsibility**: Core AI functionality for career predictions
+- **Features**:
+  - Student data analysis
+  - Career path recommendation
+  - Probability calculations
+- **Dependencies**: 
+  - Student Profile Service
+  - Education Data Service
+- **Key APIs**:
+  - Generate career recommendations
+  - Update prediction models
+  - Fetch career insights
 
-@Embeddable
-public class CareerPrediction {
-    private String careerPath;
-    private Double probability;
-    private LocalDateTime predictedAt;
-}
-```
+### 5. Frontend Service
+- **Responsibility**: User interface and client-side logic
+- **Technology**: React application
+- **Features**:
+  - Responsive UI
+  - Data visualization
+  - Real-time updates
+- **Dependencies**: All other services via API Gateway
 
-### 3. Stream
-```java
-@Entity
-@Table(name = "streams")
-public class Stream {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+## System Integration
 
-    private String name;  // e.g., "Physical Science", "Biological Science"
-    private String description;
+### API Gateway
+- Routes requests to appropriate microservices
+- Handles authentication and authorization
+- Implements rate limiting and security measures
 
-    @ElementCollection
-    private List<String> requiredOLSubjects;
-    @ElementCollection
-    private Map<String, String> minimumOLGrades;  // subject -> minimum grade
+### Inter-Service Communication
+- REST APIs for synchronous operations
+- Message queues for asynchronous operations
+- Event-driven architecture for data consistency
 
-    @OneToMany(mappedBy = "stream")
-    private List<Course> possibleCourses;
+### Data Consistency
+- Eventually consistent model
+- Each service maintains its own database
+- Cross-service data synchronization through events
 
-    @ElementCollection
-    private List<String> relatedCareers;  // Links to Career.code
-}
-```
+## Security Architecture
 
-### 4. Course
-```java
-@Entity
-@Table(name = "courses")
-public class Course {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+- JWT-based authentication
+- Role-based access control
+- API-level security
+- Data encryption at rest and in transit
 
-    private String name;  // e.g., "Computer Science", "Medicine"
-    private String description;
-    private String duration;  // e.g., "4 years"
+## Monitoring and Logging
 
-    @ManyToOne
-    private Stream stream;
+- Centralized logging system
+- Performance monitoring
+- Error tracking and alerting
+- Service health checks
 
-    @ElementCollection
-    private Map<String, String> minimumALGrades;
-    private Double minimumZScore;
+## Deployment Architecture
 
-    @ManyToMany
-    private List<Institution> offeredBy;
+- Containerized services using Docker
+- Kubernetes for orchestration
+- Scalable cloud infrastructure
+- CI/CD pipeline for automated deployments
 
-    @ElementCollection
-    private List<String> relatedCareers;  // Links to Career.code
-}
-```
+## Best Practices
 
-### 5. Career
-```java
-@Entity
-@Table(name = "careers")
-public class Career {
-    @Id
-    private String code;  // Unique career code
+1. **Service Independence**
+   - Each service can be developed, deployed, and scaled independently
+   - Loose coupling between services
+   - Clear service boundaries
 
-    private String title;
-    private String description;
-    private String category;
+2. **Data Management**
+   - Each service owns its data
+   - No direct database access between services
+   - Data replication when necessary
 
-    @ElementCollection
-    private List<String> requiredSkills;
+3. **Fault Tolerance**
+   - Circuit breakers for service calls
+   - Fallback mechanisms
+   - Retry policies
 
-    @ElementCollection
-    private List<String> relatedCourses;  // Links to Course.id
+4. **Scalability**
+   - Horizontal scaling of services
+   - Load balancing
+   - Caching strategies
 
-    @ElementCollection
-    private Map<String, String> externalLinks;  // resource -> URL
-}
-```
+## Future Considerations
 
-### 6. Institution
-```java
-@Entity
-@Table(name = "institutions")
-public class Institution {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+1. **Service Mesh Implementation**
+   - Enhanced service-to-service communication
+   - Better traffic management
+   - Improved observability
 
-    private String name;
-    private String type;  // e.g., "University", "Institute"
-    private String website;
-    private String location;
+2. **Machine Learning Pipeline**
+   - Dedicated ML service
+   - Model training infrastructure
+   - Real-time prediction capabilities
 
-    @ManyToMany(mappedBy = "offeredBy")
-    private List<Course> courses;
-
-    @ElementCollection
-    private Map<String, String> contactInfo;  // type -> value
-}
-```
+3. **Analytics Service**
+   - User behavior tracking
+   - System usage analytics
+   - Performance metrics
