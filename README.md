@@ -1,156 +1,121 @@
 # Next Step 🎓
 
-An AI-powered educational and career pathway recommendation system that helps students make informed decisions about their academic and career paths. utilizes react frontend and spring boot backend with microservices architecture
+An AI-powered educational and career pathway recommendation system that helps students make informed decisions about their academic and career paths. Built with React frontend and planned Spring Boot microservices backend.
 
-## 🌟 Features
+## 🌟 Current Features [Alpha]
+
+- **Basic Authentication**:
+  - Google authentication via Firebase
+  - Basic login/logout functionality
+
+- **Navigation**:
+  - Basic routing setup
+  - Responsive navigation bar
+
+## 🚀 Planned Features
 
 - **Career Path Recommendation**:
-Get personalized recommendations for career paths based on your interests and academic performance and goals with probability for success and failure of each path
+  - Personalized career path recommendations
+  - Success probability calculations
+  - Real-time AI-powered insights
 
-- **Explore University Fields**:
-Discover potential university fields that align with your goals
+- **Student Profile Management**:
+  - Academic performance tracking
+  - Skills and interests input
+  - Goals and preferences settings
 
-- **Responsive Web App**:
-User-friendly React frontend for easy access to your profile and recommendations and Robust spring boot backend for efficient data management utilizing microservices architecture
-
-- **AI-Powered Insights**:
-Advanced machine learning models for accurate predictions which update in real-time
-
-- **User Authentication**:
-Secure user authentication and authorization for personalized access to your profile and recommendations
+- **Educational Institution Data**:
+  - University field exploration
+  - Course compatibility matching
+  - Institution information
 
 ## 🏗️ Project Structure
 
 ```
 .
-├── README.md
-├── docs
+├── src/
+│   ├── components/     # Reusable UI components
+│   ├── pages/         # Page components
+│   ├── services/      # API and external service integrations
+│   ├── context/       # React context providers
+│   └── utils/         # Helper functions and utilities
+├── docs/             # Project documentation
 │   ├── architecture.md
 │   ├── data-model.md
 │   ├── microservices.md
 │   └── roadmap.md
-├── public
-│   ├── assets
-│   └── index.html
-├── src
-│   ├── App.js
-│   ├── components
-│   │   ├── Career.js
-│   │   ├── Course.js
-│   │   ├── Institution.js
-│   │   ├── Stream.js
-│   │   ├── Student.js
-│   │   └── User.js
-│   ├── index.js
-│   └── service
-│       ├── CareerService.js
-│       ├── CourseService.js
-│       ├── InstitutionService.js
-│       ├── StreamService.js
-│       ├── StudentService.js
-│       └── UserService.js
-├── .gitignore
-├── package.json
-└── package-lock.json
+└── public/           # Static assets
 ```
+
+## 🛠️ Tech Stack
+
+- **Frontend**:
+  - React + Vite
+  - Firebase Authentication
+  - React Router
+  - CSS Modules
+
+- **Planned Backend**:
+  - Spring Boot Microservices
+  - PostgreSQL
+  - Spring Security
+  - Spring Cloud
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Python 3.12+ (for AI model)
-- Node.js 18+ (for frontend)
-- Java 17+ (for backend)
-- Firebase (for google authentication)
-- PostgreSQL
-- Docker
+- Node.js (v18+)
+- Yarn
 - Git
-- Spring Boot
+- Firebase Project (for authentication)
 
-### Setup
+### Local Development Setup
 
-1. Clone the repository:
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/adithyasean/Next-Step-Frontend.git
-   ```
-
-2. Install dependencies:
-   ```bash
    cd Next-Step-Frontend
-   npm install
    ```
 
-3. Run the development server:
+2. **Install dependencies**:
    ```bash
-   npm start
+   yarn install
    ```
 
-#### Firebase Setup
-
-Here's a step-by-step guide to set up the Firebase for your project:
-
-1. ##### Login to Firebase:**
+3. **Configure Firebase**:
+   - Copy `.env.example` to `.env`
+   - Fill in your Firebase configuration details
    ```bash
-   firebase login
+   cp .env.example .env
    ```
 
-2. ##### Initialize Firebase:**
+4. **Start development server**:
    ```bash
-   firebase init
+   yarn dev
    ```
 
-3. ##### Verify Firebase Files:**
-   Check firebase.json exists
+### Firebase Setup
 
-### After Each Pull
+1. Create a new Firebase project at [Firebase Console](https://console.firebase.google.com)
+2. Enable Authentication with Google provider
+3. Copy the Firebase configuration to your `.env` file
 
-1. **Update Dependencies:**
-   ```bash
-   npm install
-   ```
-
-2. **Run Build Runner:**
-   ```bash
-   npm run build
-   ```
-
-3. **Clean and Run:**
-   ```bash
-   npm start
-   ```
-
-## Troubleshooting
-
-- If build fails:
-  ```bash
-  npm run build
-  ```
-
-## Important Notes
-- Don't commit Firebase configuration files
-- Update `.gitignore` to exclude sensitive files
-
-## Running Components Separately
-
-### React Frontend
+## 🧪 Testing
 
 ```bash
-cd Next-Step-Frontend
-npm start
+# Run unit tests
+yarn test
+
+# Run e2e tests
+yarn test:e2e
 ```
 
-### Spring Boot Backend
+## 📚 Documentation
 
-```bash
-cd Next-Step-Backend
-./mvnw spring-boot:run
-```
-
-## 📚 Docs
-
-- [Architecture](docs/architecture.md)
-- [Roadmap](docs/roadmap.md)
-- [Data Model](docs/data-model.md)
-- [Microservices](docs/microservices.md)
+- [Architecture Overview](docs/architecture.md)
+- [Development Roadmap](docs/roadmap.md)
+- [Data Models](docs/data-model.md)
+- [Microservices Design](docs/microservices.md)
 
 ## 🤝 Contributing
 
@@ -160,6 +125,14 @@ cd Next-Step-Backend
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
+## 📝 Development Status
 
-[LICENSE](LICENSE)
+- **Frontend**: Alpha stage - Basic authentication and navigation implemented
+- **Backend**: Planning phase - Architecture and data models designed
+- **AI Models**: Core models developed, integration pending
+
+For detailed progress and upcoming features, see our [roadmap](docs/roadmap.md).
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
