@@ -68,6 +68,7 @@ An AI-powered educational and career pathway recommendation system that helps st
 - Yarn
 - Git
 - Firebase Project (for authentication)
+- Backend API running (for predictions)
 
 ### Local Development Setup
 
@@ -82,12 +83,21 @@ An AI-powered educational and career pathway recommendation system that helps st
    yarn install
    ```
 
-3. **Configure Firebase**:
+3. **Environment Setup**:
    - Copy `.env.example` to `.env`
-   - Fill in your Firebase configuration details
-   ```bash
-   cp .env.example .env
-   ```
+   - Fill in your environment variables:
+     ```bash
+     cp .env.example .env
+     ```
+   Required variables:
+   - `VITE_API_URL`: Your backend API URL
+   - Firebase configuration (from Firebase Console):
+     - `VITE_FIREBASE_API_KEY`
+     - `VITE_FIREBASE_AUTH_DOMAIN`
+     - `VITE_FIREBASE_PROJECT_ID`
+     - `VITE_FIREBASE_STORAGE_BUCKET`
+     - `VITE_FIREBASE_MESSAGING_SENDER_ID`
+     - `VITE_FIREBASE_APP_ID`
 
 4. **Start development server**:
    ```bash
@@ -97,8 +107,29 @@ An AI-powered educational and career pathway recommendation system that helps st
 ### Firebase Setup
 
 1. Create a new Firebase project at [Firebase Console](https://console.firebase.google.com)
-2. Enable Authentication with Google provider
-3. Copy the Firebase configuration to your `.env` file
+2. Enable Authentication:
+   - Go to Authentication > Sign-in method
+   - Enable Google provider
+3. Enable Firestore:
+   - Go to Firestore Database
+   - Create database in production mode
+   - Set up Firestore rules:
+     ```javascript
+     rules_version = '2';
+     service cloud.firestore {
+       match /databases/{database}/documents {
+         match /profiles/{userId} {
+           allow read, write: if request.auth != null && request.auth.uid == userId;
+         }
+       }
+     }
+     ```
+4. Get your Firebase configuration:
+   - Go to Project Settings > General
+   - Scroll down to "Your apps"
+   - Click the web icon (</>)
+   - Register your app
+   - Copy the configuration to your `.env` file
 
 ## 🧪 Testing
 
