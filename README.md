@@ -26,6 +26,8 @@ Secure user authentication and authorization for personalized access to your pro
 ├── README.md
 ├── docs
 │   ├── architecture.md
+│   ├── data-model.md
+│   ├── microservices.md
 │   └── roadmap.md
 ├── public
 │   ├── assets
@@ -62,6 +64,7 @@ Secure user authentication and authorization for personalized access to your pro
 - PostgreSQL
 - Docker
 - Git
+- Spring Boot
 
 ### Setup
 
@@ -74,6 +77,11 @@ Secure user authentication and authorization for personalized access to your pro
    ```bash
    cd Next-Step-Frontend
    npm install
+   ```
+
+3. Run the development server:
+   ```bash
+   npm start
    ```
 
 #### Firebase Setup
@@ -90,31 +98,31 @@ Here's a step-by-step guide to set up the Firebase for your project:
    firebase init
    ```
 
-5. ##### Verify Firebase Files:**
-    Check firebase.json exists
+3. ##### Verify Firebase Files:**
+   Check firebase.json exists
 
 ### After Each Pull
 
 1. **Update Dependencies:**
    ```bash
-
+   npm install
    ```
 
 2. **Run Build Runner:**
    ```bash
-   
+   npm run build
    ```
 
 3. **Clean and Run:**
    ```bash
-   
+   npm start
    ```
 
 ## Troubleshooting
 
 - If build fails:
   ```bash
-  
+  npm run build
   ```
 
 ## Important Notes
@@ -140,7 +148,9 @@ cd Next-Step-Backend
 ## 📚 Docs
 
 - [Architecture](docs/architecture.md)
-- [Roadmap](docs/roadmap.md) 
+- [Roadmap](docs/roadmap.md)
+- [Data Model](docs/data-model.md)
+- [Microservices](docs/microservices.md)
 
 ## 🤝 Contributing
 
