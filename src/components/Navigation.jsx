@@ -17,7 +17,7 @@ import SchoolIcon from '@mui/icons-material/School';
 
 export default function Navigation() {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { user, logout } = useAuth();
+  const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleMenu = (event) => {
@@ -62,7 +62,7 @@ export default function Navigation() {
             Next Step
           </Typography>
 
-          {user ? (
+          {currentUser ? (
             <div>
               <IconButton
                 size="large"
@@ -73,8 +73,8 @@ export default function Navigation() {
                 color="inherit"
               >
                 <Avatar
-                  alt={user.displayName}
-                  src={user.photoURL}
+                  alt={currentUser.displayName}
+                  src={currentUser.photoURL}
                   sx={{ width: 32, height: 32 }}
                 />
               </IconButton>
