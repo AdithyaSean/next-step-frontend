@@ -29,29 +29,7 @@ Secure user authentication and authorization for personalized access to your pro
 │   ├── data-model.md
 │   ├── microservices.md
 │   └── roadmap.md
-├── public
-│   ├── assets
-│   └── index.html
-├── src
-│   ├── App.js
-│   ├── components
-│   │   ├── Career.js
-│   │   ├── Course.js
-│   │   ├── Institution.js
-│   │   ├── Stream.js
-│   │   ├── Student.js
-│   │   └── User.js
-│   ├── index.js
-│   └── service
-│       ├── CareerService.js
-│       ├── CourseService.js
-│       ├── InstitutionService.js
-│       ├── StreamService.js
-│       ├── StudentService.js
-│       └── UserService.js
-├── .gitignore
-├── package.json
-└── package-lock.json
+├── LICENSE
 ```
 
 ## 🚀 Getting Started
@@ -73,17 +51,6 @@ Secure user authentication and authorization for personalized access to your pro
    git clone https://github.com/adithyasean/Next-Step-Frontend.git
    ```
 
-2. Install dependencies:
-   ```bash
-   cd Next-Step-Frontend
-   npm install
-   ```
-
-3. Run the development server:
-   ```bash
-   npm start
-   ```
-
 #### Firebase Setup
 
 Here's a step-by-step guide to set up the Firebase for your project:
@@ -103,20 +70,7 @@ Here's a step-by-step guide to set up the Firebase for your project:
 
 ### After Each Pull
 
-1. **Update Dependencies:**
-   ```bash
-   npm install
-   ```
 
-2. **Run Build Runner:**
-   ```bash
-   npm run build
-   ```
-
-3. **Clean and Run:**
-   ```bash
-   npm start
-   ```
 
 ## Troubleshooting
 
@@ -133,17 +87,6 @@ Here's a step-by-step guide to set up the Firebase for your project:
 
 ### React Frontend
 
-```bash
-cd Next-Step-Frontend
-npm start
-```
-
-### Spring Boot Backend
-
-```bash
-cd Next-Step-Backend
-./mvnw spring-boot:run
-```
 
 ## 📚 Docs
 
