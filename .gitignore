@@ -25,6 +25,7 @@ dist-ssr
 *.sw?
 
 # Firebase
+firebase.js
 firebase.json
 firestore.rules
 firestore.indexes.json
