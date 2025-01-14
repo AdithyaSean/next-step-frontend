@@ -186,7 +186,7 @@ const ProfileForm = () => {
 
       // Send to Spring Boot backend
       const response = await axios.put(
-        `${API_URL}/api/v1/students/${currentUser.uid}`, 
+        `${API_URL}http://localhost:8080/users/{id}${currentUser.uid}`, 
         profileData,
         {
           headers: {
