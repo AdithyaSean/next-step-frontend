@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { getPredictions, saveProfile } from '../../services/predictionService';
 import './ProfileForm.css';
+import axios from 'axios';
 
 // Constants matching AI model configuration
 const OL_SUBJECTS = {
@@ -53,6 +54,8 @@ const CAREERS = {
   Teaching: 4,
   Research: 5,
 };
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ProfileForm = () => {
   const { currentUser, userProfile, updateProfile } = useAuth();
@@ -166,39 +169,43 @@ const ProfileForm = () => {
     setIsSubmitting(true);
     
     try {
-      // Transform data to match model input format
-      const modelData = {
-        education_level: formData.educationLevel,
-        ol_results: Object.entries(formData.olResults).map(([subject, grade]) => ({
-          subject: OL_SUBJECTS[subject],
-          grade: gradeToNumber(grade)
-        })),
-        al_stream: AL_STREAMS[formData.stream],
-        al_results: Object.entries(formData.alResults).map(([subject, grade]) => ({
-          subject: AL_SUBJECTS[subject],
-          grade: gradeToNumber(grade)
-        })),
-        z_score: parseFloat(formData.zScore) || 0,
-        gpa: parseFloat(formData.gpa) || 0
+      // Transform form data to match backend DTO structure
+      const profileData = {
+        id: currentUser.uid,
+        name: formData.fullName,
+        school: formData.school,
+        district: formData.district,
+        contact: formData.contact,
+        educationLevel: parseInt(formData.educationLevel),
+        olResults: formData.olResults,
+        stream: formData.stream,
+        alResults: formData.alResults,
+        zScore: parseFloat(formData.zScore || 0),
+        gpa: parseFloat(formData.gpa || 0)
       };
 
-      // Get predictions from the model
-      const predictions = await getPredictions(modelData);
-      
-      // Save complete profile with predictions
-      await updateProfile({
-        ...formData,
-        predictions,
-        userId: currentUser.uid,
-        timestamp: new Date().toISOString()
-      });
+      // Send to Spring Boot backend
+      const response = await axios.put(
+        `${API_URL}/api/v1/students/${currentUser.uid}`, 
+        profileData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${await currentUser.getIdToken()}`
+          }
+        }
+      );
 
-      // TODO: Handle successful prediction (we'll add UI for this later)
-      console.log('Profile updated with predictions:', predictions);
-      
+      if (response.status === 200) {
+        // Update local state with response data
+        await updateProfile(response.data);
+        // Show success message
+        alert('Profile updated successfully');
+      }
+
     } catch (error) {
-      setApiError(error.message || 'An error occurred while processing your profile');
-      console.error('Submission error:', error);
+      console.error('Error updating profile:', error);
+      alert(error.response?.data?.message || 'Error updating profile');
     } finally {
       setIsSubmitting(false);
     }
