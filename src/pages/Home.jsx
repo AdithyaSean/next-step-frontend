@@ -3,13 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import SchoolIcon from '@mui/icons-material/School';
 import WorkIcon from '@mui/icons-material/Work';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Home() {
-  const { user, signInWithGoogle } = useAuth();
+  const { currentUser, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const handleGetStarted = async () => {
-    if (!user) {
+    if (!currentUser) {
       try {
         await signInWithGoogle();
       } catch (error) {
@@ -58,14 +59,20 @@ export default function Home() {
         <Typography variant="h5" color="text.secondary" paragraph>
           Your AI-powered educational and career pathway advisor
         </Typography>
-        <Button
-          variant="contained"
-          size="large"
-          onClick={handleGetStarted}
-          sx={{ mt: 4 }}
-        >
-          Get Started
-        </Button>
+        {currentUser ? (
+          <Typography variant="h6" color="text.primary" sx={{ mt: 4 }}>
+            Hello, {currentUser.name}!
+              </Typography>
+        ) : (
+          <Button
+            variant="contained"
+            size="large"
+            onClick={handleGetStarted}
+            sx={{ mt: 4 }}
+          >
+            Get Started
+          </Button>
+        )}
       </Box>
 
       {/* Features Section */}

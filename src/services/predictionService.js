@@ -1,8 +1,8 @@
-const RECOMMENDATIONS_API_URL = import.meta.env.SPRING_RECOMMENDATIONS_API_URL || 'http://localhost:8082';
+const RECOMMENDATIONS_API_URL = import.meta.env.SPRING_RECOMMENDATIONS_API_URL || 'http://localhost:8080/recommendations';
 
 export const getPredictions = async (studentData) => {
   try {
-    const response = await fetch(`${RECOMMENDATIONS_API_URL}/recommendations/predict`, {
+    const response = await fetch(`${RECOMMENDATIONS_API_URL}/predict`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

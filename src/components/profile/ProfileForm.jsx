@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { getPredictions, saveProfile } from '../../services/predictionService';
+import { getPredictions } from '../../services/predictionService';
+import { updateUser } from '../../services/userService';
 import './ProfileForm.css';
 
 const OL_SUBJECTS = {
@@ -43,43 +44,19 @@ const STREAM_SUBJECTS = {
   "Technology": ["Engineering_Tech", "Science_Tech", "ICT"],
 };
 
-const CAREERS = {
-  Engineering: 0,
-  Medicine: 1,
-  IT: 2,
-  Business: 3,
-  Teaching: 4,
-  Research: 5,
-};
-
 const ProfileForm = () => {
-  const { currentUser, userProfile, updateProfile } = useAuth();
   const [formData, setFormData] = useState({
-    fullName: userProfile?.fullName || '',
-    school: userProfile?.school || '',
-    district: userProfile?.district || '',
-    contact: userProfile?.contact || '',
-    educationLevel: userProfile?.educationLevel || 0,
-    olResults: userProfile?.olResults || Object.fromEntries(Object.keys(OL_SUBJECTS).map(subject => [subject, ''])),
-    stream: userProfile?.stream || '',
-    alResults: userProfile?.alResults || {},
-    zScore: userProfile?.zScore || '',
-    gpa: userProfile?.gpa || '',
+    educationLevel: 0,
+    olResults: Object.fromEntries(Object.keys(OL_SUBJECTS).map(subject => [subject, ''])),
+    alStream: null,
+    alResults: {},
+    gpa: null,
+    zScore: null,
   });
-
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState(null);
   const [predictions, setPredictions] = useState(null);
-
-  useEffect(() => {
-    if (userProfile) {
-      setFormData(prev => ({
-        ...prev,
-        ...userProfile
-      }));
-    }
-  }, [userProfile]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -91,8 +68,8 @@ const ProfileForm = () => {
     });
 
     if (formData.educationLevel >= 1) {
-      if (!formData.stream) {
-        newErrors.stream = 'A/L stream is required';
+      if (!formData.alStream) {
+        newErrors.alStream = 'A/L stream is required';
       } else {
         Object.entries(formData.alResults).forEach(([subject, grade]) => {
           if (!grade) {
@@ -142,7 +119,7 @@ const ProfileForm = () => {
     const streamSubjects = STREAM_SUBJECTS[stream] || [];
     setFormData(prev => ({
       ...prev,
-      stream,
+      alStream: stream,
       alResults: Object.fromEntries(streamSubjects.map(subject => [subject, '']))
     }));
   };
@@ -164,7 +141,7 @@ const ProfileForm = () => {
           subject: OL_SUBJECTS[subject],
           grade: gradeToNumber(grade)
         })),
-        al_stream: AL_STREAMS[formData.stream],
+        al_stream: AL_STREAMS[formData.alStream],
         al_results: Object.entries(formData.alResults).map(([subject, grade]) => ({
           subject: AL_SUBJECTS[subject],
           grade: gradeToNumber(grade)
@@ -176,13 +153,8 @@ const ProfileForm = () => {
       const predictions = await getPredictions(modelData);
       setPredictions(predictions);
 
-      await updateProfile({
-        ...formData,
-        predictions,
-        userId: currentUser.uid,
-        timestamp: new Date().toISOString()
-      });
-
+      const userId = localStorage.getItem('userId');
+      await updateUser(userId, { ...formData, predictions });
     } catch (error) {
       setApiError(error.message || 'An error occurred while processing your profile');
       console.error('Submission error:', error);
@@ -204,43 +176,6 @@ const ProfileForm = () => {
         </div>
       )}
       
-      <section className="form-section">
-        <h2>Personal Information</h2>
-        <div className="form-group">
-          <label htmlFor="fullName">Full Name</label>
-          <input
-            type="text"
-            id="fullName"
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="school">School</label>
-          <input
-            type="text"
-            id="school"
-            name="school"
-            value={formData.school}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="district">District</label>
-          <input
-            type="text"
-            id="district"
-            name="district"
-            value={formData.district}
-            onChange={handleChange}
-            required
-          />
-        </div>
-      </section>
-
       <section className="form-section">
         <h2>Education Level</h2>
         <div className="form-group">
@@ -286,11 +221,11 @@ const ProfileForm = () => {
         <section className="form-section">
           <h2>A/L Information</h2>
           <div className="form-group">
-            <label htmlFor="stream">Stream</label>
+            <label htmlFor="alStream">Stream</label>
             <select
-              id="stream"
-              name="stream"
-              value={formData.stream}
+              id="alStream"
+              name="alStream"
+              value={formData.alStream}
               onChange={handleStreamChange}
               required
             >
@@ -299,12 +234,12 @@ const ProfileForm = () => {
                 <option key={stream} value={stream}>{stream}</option>
               ))}
             </select>
-            {errors.stream && (
-              <span className="error-text">{errors.stream}</span>
+            {errors.alStream && (
+              <span className="error-text">{errors.alStream}</span>
             )}
           </div>
           
-          {formData.stream && STREAM_SUBJECTS[formData.stream].map(subject => (
+          {formData.alStream && STREAM_SUBJECTS[formData.alStream].map(subject => (
             <div key={subject} className="form-group">
               <label htmlFor={`al-${subject}`}>{subject.replace('_', ' ')}</label>
               <select
