@@ -5,7 +5,7 @@ import ProfileForm from '../components/profile/ProfileForm';
 import './Profile.css';
 
 const Profile = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, userProfile } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const Profile = () => {
         <h1>Student Profile</h1>
         <p>Complete your profile to get personalized career recommendations</p>
       </div>
-      <ProfileForm />
+      <ProfileForm userProfile={userProfile} />
     </div>
   );
 };

@@ -3,7 +3,6 @@ import { useAuth } from '../../context/AuthContext';
 import { getPredictions, saveProfile } from '../../services/predictionService';
 import './ProfileForm.css';
 
-// Constants matching AI model configuration
 const OL_SUBJECTS = {
   Maths: 0,
   Science: 1,
@@ -57,7 +56,6 @@ const CAREERS = {
 const ProfileForm = () => {
   const { currentUser, userProfile, updateProfile } = useAuth();
   const [formData, setFormData] = useState({
-    // Initialize with user profile data if it exists
     fullName: userProfile?.fullName || '',
     school: userProfile?.school || '',
     district: userProfile?.district || '',
@@ -73,8 +71,8 @@ const ProfileForm = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState(null);
+  const [predictions, setPredictions] = useState(null);
 
-  // Load profile data when userProfile changes
   useEffect(() => {
     if (userProfile) {
       setFormData(prev => ({
@@ -84,18 +82,15 @@ const ProfileForm = () => {
     }
   }, [userProfile]);
 
-  // Validation rules
   const validateForm = () => {
     const newErrors = {};
     
-    // Validate O/L Results
     Object.entries(formData.olResults).forEach(([subject, grade]) => {
       if (!grade) {
         newErrors[`ol_${subject}`] = `${subject} grade is required`;
       }
     });
 
-    // Validate A/L Stream and Results if education level is AL or higher
     if (formData.educationLevel >= 1) {
       if (!formData.stream) {
         newErrors.stream = 'A/L stream is required';
@@ -114,7 +109,6 @@ const ProfileForm = () => {
       }
     }
 
-    // Validate GPA if education level is UNI
     if (formData.educationLevel === 2 && formData.gpa) {
       const gpa = parseFloat(formData.gpa);
       if (gpa < 2.0 || gpa > 4.0) {
@@ -144,7 +138,6 @@ const ProfileForm = () => {
     }));
   };
 
-  // Update AL subjects when stream changes
   const handleStreamChange = (e) => {
     const stream = e.target.value;
     const streamSubjects = STREAM_SUBJECTS[stream] || [];
@@ -166,7 +159,6 @@ const ProfileForm = () => {
     setIsSubmitting(true);
     
     try {
-      // Transform data to match model input format
       const modelData = {
         education_level: formData.educationLevel,
         ol_results: Object.entries(formData.olResults).map(([subject, grade]) => ({
@@ -182,10 +174,9 @@ const ProfileForm = () => {
         gpa: parseFloat(formData.gpa) || 0
       };
 
-      // Get predictions from the model
       const predictions = await getPredictions(modelData);
-      
-      // Save complete profile with predictions
+      setPredictions(predictions);
+
       await updateProfile({
         ...formData,
         predictions,
@@ -193,9 +184,6 @@ const ProfileForm = () => {
         timestamp: new Date().toISOString()
       });
 
-      // TODO: Handle successful prediction (we'll add UI for this later)
-      console.log('Profile updated with predictions:', predictions);
-      
     } catch (error) {
       setApiError(error.message || 'An error occurred while processing your profile');
       console.error('Submission error:', error);
@@ -204,7 +192,6 @@ const ProfileForm = () => {
     }
   };
 
-  // Convert letter grades to numerical values
   const gradeToNumber = (grade) => {
     const gradeMap = { 'A': 4, 'B': 3, 'C': 2, 'S': 1, 'F': 0 };
     return gradeMap[grade] || 0;
@@ -378,8 +365,21 @@ const ProfileForm = () => {
         </div>
       )}
 
-      <button 
-        type="submit" 
+      {predictions && (
+        <section className="form-section">
+          <h2>Career Predictions</h2>
+          <div className="predictions">
+            {Object.entries(predictions).map(([career, probability]) => (
+              <div key={career} className="prediction-item">
+                <span className="career-name">{career}</span>
+                <span className="probability">{probability.toFixed(2)}%</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+      <button
+        type="submit"
         className="submit-button"
         disabled={isSubmitting}
       >

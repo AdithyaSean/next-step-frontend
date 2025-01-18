@@ -171,6 +171,89 @@ Predicts career probabilities based on a student's educational profile.
     "gpa": 3.75
   }
   ```
+
+### **Firebase Integration**
+The **Users Microservice** integrates with Firebase for user authentication. The Firebase UID and token are stored in the `User` entity for authenticated users.
+
+- **Fields**:
+    - **`firebaseUid`**: The Firebase UID of the user.
+    - **`firebaseToken`**: The Firebase token for the user.
+
+#### **Example:**
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "password123",
+  "role": "STUDENT",
+  "active": true,
+  "createdAt": "2023-10-01T12:00:00Z",
+  "updatedAt": "2023-10-01T12:00:00Z",
+  "firebaseUid": "firebase-uid-123",
+  "firebaseToken": "firebase-token-456"
+}
+```
+
+### **CORS Configuration**
+CORS (Cross-Origin Resource Sharing) is configured to allow requests from any origin. This is handled by the `CorsConfig` class.
+
+#### **Example:**
+```java
+@Configuration
+public class CorsConfig {
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true)
+                        .maxAge(3600);
+            }
+        };
+    }
+}
+```
+
+### **Global Exception Handling**
+Global exception handling is configured to handle common exceptions such as `EntityNotFoundException`, `IllegalArgumentException`, and validation errors.
+
+#### **Example:**
+```java
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleEntityNotFoundException(EntityNotFoundException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("error", ex.getMessage());
+        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("error", ex.getMessage());
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> 
+            errors.put(error.getField(), error.getDefaultMessage())
+        );
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+}
+```
+
+### **Conclusion**
+These updates ensure that the documentation reflects the current state of the system, including the integration with Firebase, CORS configuration, and security settings. For further details, refer to the [development guide](docs/development.md).
+
 - **Response**:
     - **Status Code**: `200 OK`
     - **Body**:

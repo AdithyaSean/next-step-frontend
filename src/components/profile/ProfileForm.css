@@ -119,6 +119,25 @@
   background-color: #ccc;
 }
 
+.predictions {
+  margin-top: 1rem;
+}
+
+.prediction-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.career-name {
+  font-weight: bold;
+}
+
+.probability {
+  color: #1976d2;
+}
+
 @media (max-width: 768px) {
   .profile-form {
     margin: 1rem;

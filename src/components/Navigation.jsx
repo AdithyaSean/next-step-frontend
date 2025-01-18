@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
   AppBar,
@@ -96,19 +96,27 @@ export default function Navigation() {
                 <MenuItem onClick={() => { handleClose(); navigate('/profile'); }}>
                   Profile
                 </MenuItem>
-                <MenuItem onClick={() => { handleClose(); navigate('/recommendations'); }}>
-                  Recommendations
+                <MenuItem onClick={() => { handleClose(); navigate('/career-recommendation'); }}>
+                  Career Recommendations
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
           ) : (
-            <Button
-              color="inherit"
-              onClick={() => navigate('/login')}
-            >
-              Login
-            </Button>
+            <>
+              <Button color="inherit" component={Link} to="/">
+                Home
+              </Button>
+              <Button color="inherit" component={Link} to="/profile">
+                Profile
+              </Button>
+              <Button color="inherit" component={Link} to="/career-recommendation">
+                Career Recommendations
+              </Button>
+              <Button color="inherit" onClick={() => navigate('/login')}>
+                Login
+              </Button>
+            </>
           )}
         </Toolbar>
       </AppBar>
