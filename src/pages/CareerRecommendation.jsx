@@ -1,7 +1,6 @@
 // src/pages/CareerRecommendation.jsx
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { getPredictions } from '../services/predictionService';
 import { Box, Typography, CircularProgress, Paper, List, ListItem, ListItemText } from '@mui/material';
 

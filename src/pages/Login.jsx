@@ -1,19 +1,12 @@
 import { Container, Box, Button, Typography, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import GoogleIcon from '@mui/icons-material/Google';
 
 export default function Login() {
-  const { signInWithGoogle } = useAuth();
   const navigate = useNavigate();
 
-  const handleGoogleSignIn = async () => {
-    try {
-      await signInWithGoogle();
-      navigate('/profile');
-    } catch (error) {
-      console.error('Error signing in with Google:', error);
-    }
+  const handleLogin = () => {
+    // Handle login logic here
+    navigate('/profile');
   };
 
   return (
@@ -44,12 +37,11 @@ export default function Login() {
           </Typography>
           <Button
             variant="contained"
-            startIcon={<GoogleIcon />}
-            onClick={handleGoogleSignIn}
+            onClick={handleLogin}
             fullWidth
             size="large"
           >
-            Sign in with Google
+            Sign in
           </Button>
         </Paper>
       </Box>

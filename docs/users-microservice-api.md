@@ -229,29 +229,6 @@ Represents a user in the system.
 }
 ```
 
-### **Firebase Integration**
-The **Users Microservice** integrates with Firebase for user authentication. The Firebase UID and token are stored in the `User` entity for authenticated users.
-
-- **Fields**:
-    - **`firebaseUid`**: The Firebase UID of the user.
-    - **`firebaseToken`**: The Firebase token for the user.
-
-#### **Example:**
-```json
-{
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "name": "John Doe",
-  "email": "john.doe@example.com",
-  "password": "password123",
-  "role": "STUDENT",
-  "active": true,
-  "createdAt": "2023-10-01T12:00:00Z",
-  "updatedAt": "2023-10-01T12:00:00Z",
-  "firebaseUid": "firebase-uid-123",
-  "firebaseToken": "firebase-token-456"
-}
-```
-
 ### **CORS Configuration**
 CORS (Cross-Origin Resource Sharing) is configured to allow requests from any origin. This is handled by the `CorsConfig` class.
 
@@ -300,7 +277,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error -> 
+        ex.getBindingResult().getFieldErrors().forEach(error ->
             errors.put(error.getField(), error.getDefaultMessage())
         );
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
@@ -362,4 +339,5 @@ public class UserService {
 ```
 
 This method retrieves the student's profile, constructs a `PredictionRequest`, and sends it to the **Recommendations Microservice** for career probability predictions.
+
 

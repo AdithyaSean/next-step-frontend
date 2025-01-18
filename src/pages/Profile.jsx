@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import ProfileForm from '../components/profile/ProfileForm';
 import './Profile.css';
 
 const Profile = () => {
-  const { currentUser, userProfile } = useAuth();
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +23,7 @@ const Profile = () => {
         <h1>Student Profile</h1>
         <p>Complete your profile to get personalized career recommendations</p>
       </div>
-      <ProfileForm userProfile={userProfile} />
+      <ProfileForm />
     </div>
   );
 };

@@ -243,7 +243,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error -> 
+        ex.getBindingResult().getFieldErrors().forEach(error ->
             errors.put(error.getField(), error.getDefaultMessage())
         );
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
@@ -333,3 +333,4 @@ This documentation should help developers integrate the frontend with the backen
 4. **Additional Notes**: The frontend uses Firebase for authentication and Firestore for storing user profiles, which is mentioned in the additional notes.
 
 This documentation should help developers understand how the frontend interacts with the backend services.
+

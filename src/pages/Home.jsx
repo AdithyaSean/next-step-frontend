@@ -1,6 +1,5 @@
 import { Container, Typography, Box, Button, Paper, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import SchoolIcon from '@mui/icons-material/School';
 import WorkIcon from '@mui/icons-material/Work';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
