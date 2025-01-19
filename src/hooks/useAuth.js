@@ -12,6 +12,7 @@ export const useAuth = () => {
         setCurrentUser(user);
         return user;
       } else {
+        setLoginAttempts(loginAttempts + 1);
         throw new Error('Invalid credentials');
       }
     } catch (error) {
@@ -37,6 +38,7 @@ export const useAuth = () => {
   const logout = () => {
     localStorage.removeItem('user');
     setCurrentUser(null);
+    setLoginAttempts(0);
   };
 
   return { currentUser, login, createAccount, logout };

@@ -1,7 +1,8 @@
-const USERS_API_URL = import.meta.env.SPRING_USERS_API_URL || 'http://localhost:8081/users';
+const USERS_API_URL = import.meta.env.SPRING_USERS_API_URL || 'http://localhost:8080/users';
 
 export const createUser = async (userData) => {
   try {
+    console.log('Request:', userData);
     const response = await fetch(`${USERS_API_URL}`, {
       method: 'POST',
       headers: {
@@ -9,12 +10,15 @@ export const createUser = async (userData) => {
       },
       body: JSON.stringify(userData),
     });
+    console.log('Response:', response);
 
     if (!response.ok) {
-      throw new Error('Failed to create user');
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to create user');
     }
 
-    return await response.json();
+    const user = await response.json();
+    return user;
   } catch (error) {
     console.error('User service error:', error);
     throw error;
@@ -23,10 +27,18 @@ export const createUser = async (userData) => {
 
 export const getUser = async (email) => {
   try {
-    const response = await fetch(`${USERS_API_URL}/email/${email}`);
+    console.log('Fetching user with email:', email);
+    const response = await fetch(`${USERS_API_URL}/email/${email}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log('Response:', response);
 
     if (!response.ok) {
-      throw new Error('Failed to fetch user');
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to fetch user');
     }
 
     return await response.json();
@@ -47,7 +59,8 @@ export const updateUser = async (userId, userData) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to update user');
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to update user');
     }
 
     return await response.json();
