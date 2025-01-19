@@ -1,71 +1,49 @@
-const USERS_API_URL = import.meta.env.SPRING_USERS_API_URL || 'http://localhost:8080/users';
+const API_BASE_URL = import.meta.env.VITE_API_GATEWAY_URL || 'http://localhost:8080';
 
-export const createUser = async (userData) => {
-  try {
-    console.log('Request:', userData);
-    const response = await fetch(`${USERS_API_URL}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
-    console.log('Response:', response);
+export const login = async (credentials) => {
+  const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(credentials)
+  });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to create user');
-    }
-
-    const user = await response.json();
-    return user;
-  } catch (error) {
-    console.error('User service error:', error);
-    throw error;
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Login failed');
   }
+
+  const { token, email, role } = await response.json();
+  localStorage.setItem('accessToken', token);
+  localStorage.setItem('userEmail', email);
+  localStorage.setItem('userRole', role);
+  
+  return { token, email, role };
 };
 
-export const getUser = async (email) => {
-  try {
-    console.log('Fetching user with email:', email);
-    const response = await fetch(`${USERS_API_URL}/email/${email}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    console.log('Response:', response);
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to fetch user');
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('User service error:', error);
-    throw error;
-  }
+export const logout = async () => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('userRole');
 };
 
-export const updateUser = async (userId, userData) => {
-  try {
-    const response = await fetch(`${USERS_API_URL}/${userId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
+export const updateUser = async (userData) => {
+  const token = localStorage.getItem('accessToken');
+  
+  const response = await fetch(`${API_BASE_URL}/users`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(userData)
+  });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to update user');
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('User service error:', error);
-    throw error;
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to update user');
   }
+
+  return await response.json();
 };
